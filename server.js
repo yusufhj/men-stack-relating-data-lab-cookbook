@@ -3,13 +3,16 @@ const methodOverride = require('method-override');
 const morgan = require('morgan');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-const addUserToViews = require('./middleware/addUserToViews');
 require('dotenv').config();
 require('./config/database');
 
 // Controllers
 const authController = require('./controllers/auth');
+const foodsController = require('./controllers/foods.js');
+const addUserToViews = require('./middleware/addUserToViews');
 const isSignedIn = require('./middleware/isSignedIn');
+const passUserToView = require('./middleware/passUserToView.js');
+
 
 const app = express();
 // Set the port from environment variable or default to 3000
@@ -36,24 +39,17 @@ app.use(
 
 app.use(addUserToViews);
 
+
 // Public Routes
 app.get('/', async (req, res) => {
   res.render('index.ejs');
 });
 
+app.use(passUserToView)
 app.use('/auth', authController);
-
-// Protected Routes
 app.use(isSignedIn);
+app.use('/users/:userId/foods',foodsController);
 
-app.get('/protected', async (req, res) => {
-  if (req.session.user) {
-    res.send(`Welcome to the party ${req.session.user.username}.`);
-  } else {
-    res.sendStatus(404);
-    // res.send('Sorry, no guests allowed.');
-  }
-});
 
 app.listen(port, () => {
   // eslint-disable-next-line no-console
