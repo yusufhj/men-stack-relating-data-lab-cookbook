@@ -7,5 +7,21 @@
   </head>
   <body>
     <h1>Welcome to my Pantry</h1>
+    <a href="/users/<%= user._id %>/foods/new">Add New Item</a>
+    <% if (user.pantry) { %>
+      <h2>Your Pantry</h2>
+      <ul>
+        <% user.pantry.forEach((food) => { %>
+          <li>
+            <a href="/<%= food._id %>"><%= food.name %></a>
+            <form action="/<%= food._id %>?_method=DELETE" method="post">
+              <button type="submit">Delete</button>
+            </form>
+          </li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <p>There are no items in this pantry.</p>
+    <% } %>
   </body>
 </html>
