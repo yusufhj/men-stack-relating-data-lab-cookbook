@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit <%= food.name %></title>
+</head>
+<body>
+    <h1>Edit <%= food.name %></h1>
+    <form action="/users/:userId/foods?_method=PUT" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="name" value="<%= food.name %>" required>
+        <label for="cuisine">Cuisine:</label>
+        <input type="text" name="cuisine" id="cuisine" value="<%= food.cuisine %>" required>
+        <label for="calories">Calories:</label>
+        <input type="number" name="calories" id="calories" value="<%= food.calories %>" required>
+        <button type="submit">Save Changes</button>
+    </form>
+</body>
+</html>

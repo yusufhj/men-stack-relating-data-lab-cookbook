@@ -3,6 +3,7 @@ const router = express.Router();
 
 const User = require('../models/user.js');
 
+// index page
 router.get('/', async (req, res) => {
     try {
         const user = await User.findById(req.session.user._id);
@@ -10,7 +11,7 @@ router.get('/', async (req, res) => {
         // Look up the current user's pantry
         const userPantry = user.pantry
         // Send all pantry items to the view via res.locals
-        res.locals.pantry = userPantry? userPantry : null;
+        res.locals.pantry = userPantry;
         // Render the view
         res.render('foods/index.ejs');
     } catch (error) {
@@ -19,10 +20,12 @@ router.get('/', async (req, res) => {
     }
 });
 
+// new page
 router.get('/new', (req, res) => {
     res.render('foods/new.ejs')
 });
 
+// create post
 router.post('/', async (req, res) => {
     try {
         // Look up the user from req.session
@@ -39,6 +42,7 @@ router.post('/', async (req, res) => {
     }
 });
 
+// delete
 router.delete('/:itemId', async (req, res) => {
     try {
         // Look up the user from req.session
@@ -50,6 +54,24 @@ router.delete('/:itemId', async (req, res) => {
         user.save();
         // Redirect to the index view
         res.redirect(`/users/${user._id}/foods`);
+    } catch (error) {
+        console.log(error);
+        res.redirect('/');
+    }
+});
+
+// edit page
+router.get('/:itemId/edit', async (req, res) => {
+    try {
+        // Look up the user from req.session
+        const user = await User.findById(req.session.user._id);
+        // Find the current food from the id using req.params
+        const foodItem = user.pantry.id(req.params.itemId);
+        // res.send(foodItem);
+        // This route should res.render() an edit.ejs view
+        // Send the current food to the view via res.locals
+        res.locals.food = foodItem;
+        res.render('foods/edit.ejs');
     } catch (error) {
         console.log(error);
         res.redirect('/');
