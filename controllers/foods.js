@@ -6,9 +6,7 @@ const User = require('../models/user.js');
 router.get('/', async (req, res) => {
     try {
         const user = await User.findById(req.session.user._id);
-        console.log(user.pantry);
-        // res.locals.user.pantry = userPantry;
-        console.log(user.pantry);
+        // console.log(user.pantry);
         res.render('foods/index.ejs', { user });
     } catch (error) {
         console.log(error);
@@ -28,7 +26,24 @@ router.post('/', async (req, res) => {
         res.redirect(`/users/${user._id}/foods`);
     } catch (error) {
         res.send(error);
-        res.redirect('/')
+        res.redirect('/');
+    }
+});
+
+router.delete('/:itemId', async (req, res) => {
+    try {
+        // Look up the user from req.session
+        const user = await User.findById(req.session.user._id);
+        // Use the .deleteOne() method to delete a food using the id supplied from req.params
+        const foodId = req.params.itemId;
+        user.pantry.id(foodId).deleteOne();
+        // Save changes to the user
+        user.save();
+        // Redirect to the index view
+        res.redirect(`/users/${user._id}/foods`);
+    } catch (error) {
+        console.log(error);
+        res.redirect('/');
     }
 });
 

@@ -13,8 +13,8 @@
       <ul>
         <% user.pantry.forEach((food) => { %>
           <li>
-            <a href="/<%= food._id %>"><%= food.name %></a>
-            <form action="/<%= food._id %>?_method=DELETE" method="post">
+            <a href="/users/<%= user._id %>/<%= food._id %>"><%= food.name %></a>
+            <form action="/users/<%= user._id %>/foods/<%= food._id %>?_method=DELETE" method="POST">
               <button type="submit">Delete</button>
             </form>
           </li>
