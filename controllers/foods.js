@@ -78,4 +78,22 @@ router.get('/:itemId/edit', async (req, res) => {
     }
 });
 
+router.put('/:itemId', async (req, res) => {
+    try {
+        // Find the user from req.session
+        const user = await User.findById(req.session.user._id);
+        // Find the current food from the id supplied by req.params
+        const foodItem = user.pantry.id(req.params.itemId);
+        // Use the .set() method, updating the current food to reflect the new form data on req.body
+        foodItem.set(req.body);
+        // Save the current user
+        user.save();
+        // Redirect to the index view
+        res.redirect(`/users/${user._id}/foods`);
+    } catch (error) {
+        console.log(error);
+        res.redirect('/');
+    }
+});
+
 module.exports = router;
