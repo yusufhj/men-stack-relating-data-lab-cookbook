@@ -7,7 +7,12 @@ router.get('/', async (req, res) => {
     try {
         const user = await User.findById(req.session.user._id);
         // console.log(user.pantry);
-        res.render('foods/index.ejs', { user });
+        // Look up the current user's pantry
+        const userPantry = user.pantry
+        // Send all pantry items to the view via res.locals
+        res.locals.pantry = userPantry? userPantry : null;
+        // Render the view
+        res.render('foods/index.ejs');
     } catch (error) {
         console.log(error);
         res.redirect('/');
@@ -20,9 +25,13 @@ router.get('/new', (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
+        // Look up the user from req.session
         const user = await User.findById(req.session.user._id)
+        // Push req.body (the new form data object) to the pantry array of the current user
         user.pantry.push(req.body)
+        // Save changes to the user
         user.save()
+        // Redirect back to the application's index view
         res.redirect(`/users/${user._id}/foods`);
     } catch (error) {
         res.send(error);

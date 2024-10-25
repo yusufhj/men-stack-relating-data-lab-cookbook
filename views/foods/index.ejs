@@ -8,10 +8,10 @@
   <body>
     <h1>Welcome to my Pantry</h1>
     <a href="/users/<%= user._id %>/foods/new">Add New Item</a>
-    <% if (user.pantry) { %>
+    <% if (pantry.length > 0) { %>
       <h2>Your Pantry</h2>
       <ul>
-        <% user.pantry.forEach((food) => { %>
+        <% pantry.forEach((food) => { %>
           <li>
             <a href="/users/<%= user._id %>/<%= food._id %>"><%= food.name %></a>
             <form action="/users/<%= user._id %>/foods/<%= food._id %>?_method=DELETE" method="POST">
@@ -21,7 +21,7 @@
         <% }) %>
       </ul>
     <% } else { %>
-      <p>There are no items in this pantry.</p>
+      <h2>There are no items in this pantry.</h2>
     <% } %>
   </body>
 </html>
