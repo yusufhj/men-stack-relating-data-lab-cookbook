@@ -9,6 +9,7 @@ require('./config/database');
 // Controllers
 const authController = require('./controllers/auth');
 const foodsController = require('./controllers/foods.js');
+const usersController = require('./controllers/users.js');
 const addUserToViews = require('./middleware/addUserToViews');
 const isSignedIn = require('./middleware/isSignedIn');
 const passUserToView = require('./middleware/passUserToView.js');
@@ -48,7 +49,9 @@ app.get('/', async (req, res) => {
 app.use(passUserToView)
 app.use('/auth', authController);
 app.use(isSignedIn);
+app.use('/users', usersController);
 app.use('/users/:userId/foods',foodsController);
+
 
 
 app.listen(port, () => {
