@@ -15,4 +15,16 @@ router.get('/', async (req, res) => {
     }
 });
 
+// get show user
+router.get('/:id', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        res.locals.user = user;
+        res.render('users/show.ejs');
+    } catch (error) {
+        console.log(error);
+        res.redirect('/');
+    }
+});
+
 module.exports = router;

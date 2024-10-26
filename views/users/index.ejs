@@ -11,7 +11,11 @@
     <ol>
         <% users.forEach((user) => { %>
             <li>
-                <h2><%= user.username %></h2>
+                <a href="/users/<%= user._id %>">
+                    <h2>
+                        <%= user.username %>
+                    </h2>
+                </a>
             </li>
         <% }); %>
     </ol>
